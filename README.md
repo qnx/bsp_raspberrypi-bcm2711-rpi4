@@ -1,0 +1,19 @@
+# Raspberry Pi 4 BSP
+
+QNX Board Support Package (BSP) for the Raspberry Pi 4
+
+This repo is specifically targeted at driver development. For a general-purpose image, see the Quickstart Image in QNX Software Center (QSC) or the [Custom Target Image Build](https://gitlab.com/qnx/custom-target-image-builds/raspberry-pi-4-qnx-8.0) repo.
+
+## Usage
+
+For more information on this BSP, including how to build it and load it onto your board, see the official BSP User Guide: [QNX SDP 8.0 BSP Documentation - Raspberry Pi 4 BCM2711](https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2711.rpi4_8.0/topic/about.html)
+
+Note that this Git version of the BSP differs from the QNX Software Center (QSC) version in a couple ways:
+* The Git version contains source code only (no prebuilt binaries).
+* The Git version is not fully supported by the QNX Momentics IDE.
+* The QSC version is delivered as a ZIP file. (You may notice references to a ZIP file in the BSP User Guide.)
+
+## Preparation
+
+* You need to have a local QNX SDP to build this project. To start, get a QNX SDP 8.0 license and follow the official instructions to install QNX SDP 8.0 to your host machine.
+* In addition to a baseline SDP 8.0 installation, you will also need to confirm that you have installed all of the packages listed in "source.xml".
