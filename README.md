@@ -17,3 +17,22 @@ Note that this Git version of the BSP differs from the QNX Software Center (QSC)
 
 * You need to have a local QNX SDP to build this project. To start, get a QNX SDP 8.0 license and follow the official instructions to install QNX SDP 8.0 to your host machine.
 * In addition to a baseline SDP 8.0 installation, you will also need to confirm that you have installed all of the packages listed in "source.xml".
+
+## Notice on Software Maturity and Quality
+
+The software included in this repository is classified under our Software Maturity Standard as Experimental Software – Software Quality and Maturity Level (SQML) 1.
+
+As defined in the [QNX Development License Agreement](http://www.qnx.com/download/feature.html?programid=68651), Experimental Software represents early-stage deliverables intended for evaluation or proof-of-concept purposes.
+
+SQML 1 indicates that this software is provided without one or more of the following:
+* Formal requirements
+* Formal design or architecture
+* Formal testing
+* Formal support
+* Formal documentation
+* Certifications of any type
+* End-of-Life or End-of-Support policy
+
+Additionally, this software is not monitored or scanned under our Cybersecurity Management Standard.
+
+No warranties, guarantees, or claims are offered at this SQML level.
