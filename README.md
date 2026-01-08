@@ -6,7 +6,9 @@ This repo is specifically targeted at driver development. For a general-purpose 
 
 ## Usage
 
-For more information on this BSP, including how to build it and load it onto your board, see the official BSP User Guide: [QNX SDP 8.0 BSP Documentation - Raspberry Pi 4 BCM2711](https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2711.rpi4_8.0/topic/about.html)
+For more information on this BSP, including how to build it and load it onto your board, see the official BSP User Guide:
+* [BSP User Guide](https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2711.rpi4_8.0/topic/about.html)
+* [Build the BSP](https://www.qnx.com/developers/docs/BSP8.0/com.qnx.doc.bsp_raspberrypi.bcm2711.rpi4_8.0/topic/common/bsp_build.html)
 
 Note that this Git version of the BSP differs from the QNX Software Center (QSC) version in a couple ways:
 * The Git version contains source code only (no prebuilt binaries).
