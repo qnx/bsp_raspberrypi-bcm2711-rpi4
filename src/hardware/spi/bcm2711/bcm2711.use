@@ -4,3 +4,10 @@ Driver-specific options:
 
     rpanic=num      Defines read panic threshold (default: 48)
     tpanic=num      Defines write panic threshold (default: 16)
+
+Device options:
+(To be set in the config file under section 'dev'.)
+
+    cs_delay=num    CS set-up time in nanoseconds for DMA transfers: the
+                    driver asserts CS, waits this long, then starts the
+                    clock (default: 0, CS is asserted by the controller)

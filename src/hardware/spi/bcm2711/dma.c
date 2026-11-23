@@ -374,24 +374,50 @@ int bcm2711spi_dmaxfer(void *const hdl, spi_dev_t *spi_dev, dma_addr_t * const a
         return errno;
     }
 
+    if (spi_dev->cs_delay != 0) {
+        /*
+         * With ADCS set, the controller asserts CS only 3 core clock cycles
+         * before the first bit (BCM2711 ARM Peripherals, section 9.6.4).
+         * For devices that need a longer CS set-up time, drive CS from
+         * software instead: with TA set and the TX FIFO still empty, CS is
+         * asserted and SCLK stays idle until the TX DMA writes the first word.
+         */
+        __cpu_membarrier();
+        out32((base + BCM2711_SPI_CS), (spi_dev->devctrl & ~(SPI_CS_ADCS_AUTO << SPI_CS_ADCS)) |
+                                       (SPI_CS_DMAEN_DMAEN << SPI_CS_DMAEN) | (SPI_CS_TA_ACTIVE << SPI_CS_TA));
+        nanospin_ns(spi_dev->cs_delay);
+    }
+
     /* Start DMA TX transaction */
     status = dma->dma_funcs.xfer_start(dma->tx_ch_handle);
     if (status == -1) {
         spi_slogf(_SLOG_ERROR, "%s: DMA TX xfer_start failed(%s)", __func__, strerror(errno));
+        if (spi_dev->cs_delay != 0) {
+            /* De-assert CS */
+            out32((base + BCM2711_SPI_CS), in32(base + BCM2711_SPI_CS) & ~(SPI_CS_TA_ACTIVE << SPI_CS_TA));
+        }
         return errno;
     }
 
-    __cpu_membarrier();
+    if (spi_dev->cs_delay == 0) {
+        __cpu_membarrier();
 
-    /* Enable DMA transaction on SPI */
-    spi_dev->devctrl |= (SPI_CS_DMAEN_DMAEN << SPI_CS_DMAEN) | (SPI_CS_TA_ACTIVE << SPI_CS_TA) | (SPI_CS_ADCS_AUTO << SPI_CS_ADCS);
-    out32((base + BCM2711_SPI_CS), spi_dev->devctrl);
+        /* Enable DMA transaction on SPI */
+        spi_dev->devctrl |= (SPI_CS_DMAEN_DMAEN << SPI_CS_DMAEN) | (SPI_CS_TA_ACTIVE << SPI_CS_TA) | (SPI_CS_ADCS_AUTO << SPI_CS_ADCS);
+        out32((base + BCM2711_SPI_CS), spi_dev->devctrl);
+    }
 
     /*
      * Wait for DMA transaction to finish
      */
     spi_slogf(_SLOG_DEBUG2, "%s: waiting for DMA transaction to finish...", __func__);
     status = bcm2711spi_wait(spi, spi->xlen);
+
+    if (spi_dev->cs_delay != 0) {
+        /* ADCS is clear, so CS stays asserted until TA is cleared */
+        out32((base + BCM2711_SPI_CS), in32(base + BCM2711_SPI_CS) & ~(SPI_CS_TA_ACTIVE << SPI_CS_TA));
+    }
+
     if (status != EOK) {
         spi_slogf(_SLOG_ERROR, "%s: DMA XFER failed!!!", __func__);
         return status;
